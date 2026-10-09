@@ -1,0 +1,44 @@
+[
+  {
+    "_id": "e5091b7e1f17d37dc4c1bd6b",
+    "email": "dev@test.com",
+    "password": "$2b$10$wZpddTj6P3pF1s1Vjk56AOZPCcD8/Ai71ttjlvArx9T7U0odrS7YS",
+    "username": "devuser",
+    "createdAt": "2026-10-09T05:50:10.235Z"
+  },
+  {
+    "_id": "7540210f431bf1acf2e06579",
+    "email": "user_1791525349145@codesync.io",
+    "password": "$2b$10$neBn.z8GR.bpupnPoXk7qu3tF3cdiQvyOQnpHV37VVlzQZW2URKMe",
+    "username": "tester_248",
+    "createdAt": "2026-10-09T05:55:49.312Z"
+  },
+  {
+    "_id": "3843ddd751e1827a1c5907cf",
+    "email": "sumayyamirza56@gmail.com",
+    "password": "$2b$10$RDJHlt5Ydc4/c0z5YEERRuIX2ML.bIkCvUrG6zhBgcg.JbxkJSR/y",
+    "username": "sumayya",
+    "createdAt": "2026-10-09T06:00:45.540Z"
+  },
+  {
+    "_id": "c42a8c47dc446186752ac618",
+    "email": "test_1791540912552@example.com",
+    "password": "$2b$10$5IUk.LS9P2i60W2AVzx0CeVf5msz6nTi5IByNYEaTw5koZr3qu/MO",
+    "username": "test_explorer_user_1791540912552",
+    "createdAt": "2026-10-09T10:15:13.235Z"
+  },
+  {
+    "_id": "d182380446576667583d4dc0",
+    "email": "explorer_1791544261301@test.com",
+    "password": "$2b$10$wOaByAiC6Ga10xGwkKOGxeYSFZnMf0INR7WnwonXowcr8Zt3VQEiO",
+    "username": "explorer_test_1791544261301",
+    "createdAt": "2026-10-09T11:11:01.433Z"
+  },
+  {
+    "_id": "ab451af78eb55032db6889c8",
+    "email": "testuser_1791545757544@test.com",
+    "password": "$2b$10$6ncno9oWEhsdSNZ3DnusT./YYCpBCc8W0MlBWDxh2ZO7UmHHLG4GG",
+    "username": "explorer_tester",
+    "createdAt": "2026-10-09T11:35:57.747Z"
+  }
+]

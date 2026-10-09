@@ -1,0 +1,201 @@
+[
+  {
+    "_id": "9386f972bf019add250248b3",
+    "name": "test.js",
+    "code": "console.log(123)",
+    "userId": "e5091b7e1f17d37dc4c1bd6b",
+    "language": "javascript",
+    "versions": [
+      {
+        "code": "console.log(123)",
+        "createdAt": "2026-10-09T05:50:10.379Z"
+      }
+    ],
+    "createdAt": "2026-10-09T05:50:10.379Z",
+    "updatedAt": "2026-10-09T05:50:10.379Z"
+  },
+  {
+    "_id": "17f969535b9dda355b9d62df",
+    "name": "index.js",
+    "code": "console.log(\"Hello from index.js\");",
+    "userId": "c42a8c47dc446186752ac618",
+    "folderId": null,
+    "language": "javascript",
+    "versions": [
+      {
+        "code": "console.log(\"Hello from index.js\");",
+        "createdAt": "2026-10-09T10:15:13.280Z"
+      }
+    ],
+    "createdAt": "2026-10-09T10:15:13.280Z",
+    "updatedAt": "2026-10-09T10:15:13.280Z"
+  },
+  {
+    "_id": "5b3ea0abfbdcddaa61bf13e6",
+    "name": "index.html",
+    "code": "<!DOCTYPE html><html><head><link rel=\"stylesheet\" href=\"style.css\"></head><body><h1>Hello World</h1><script src=\"script.js\"></script></body></html>",
+    "userId": "d182380446576667583d4dc0",
+    "folderId": null,
+    "language": "html",
+    "versions": [
+      {
+        "code": "<!DOCTYPE html><html><head><link rel=\"stylesheet\" href=\"style.css\"></head><body><h1>Hello World</h1><script src=\"script.js\"></script></body></html>",
+        "createdAt": "2026-10-09T11:11:01.498Z"
+      }
+    ],
+    "createdAt": "2026-10-09T11:11:01.498Z",
+    "updatedAt": "2026-10-09T11:11:01.498Z"
+  },
+  {
+    "_id": "07dce4e484eb2a0cc3c67320",
+    "name": "style.css",
+    "code": "h1 { color: #10b981; font-family: sans-serif; }",
+    "userId": "d182380446576667583d4dc0",
+    "folderId": null,
+    "language": "css",
+    "versions": [
+      {
+        "code": "h1 { color: #10b981; font-family: sans-serif; }",
+        "createdAt": "2026-10-09T11:11:01.503Z"
+      }
+    ],
+    "createdAt": "2026-10-09T11:11:01.503Z",
+    "updatedAt": "2026-10-09T11:11:01.503Z"
+  },
+  {
+    "_id": "d8dcbeb1b2ee292dc76fefb2",
+    "name": "script.js",
+    "code": "console.log(\"script loaded\");",
+    "userId": "d182380446576667583d4dc0",
+    "folderId": null,
+    "language": "javascript",
+    "versions": [
+      {
+        "code": "console.log(\"script loaded\");",
+        "createdAt": "2026-10-09T11:11:01.508Z"
+      }
+    ],
+    "createdAt": "2026-10-09T11:11:01.508Z",
+    "updatedAt": "2026-10-09T11:11:01.508Z"
+  },
+  {
+    "_id": "373650d55f220052bd1deb13",
+    "name": "index.html",
+    "code": "\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Brew Cafe</title>\n  <link rel=\"stylesheet\" href=\"style.css\">\n</head>\n<body>\n  <nav><h2>BrewCafe</h2><a href=\"#home\">Home</a></nav>\n  <main id=\"home\">\n    <p class=\"tag\">YOUR DAILY DOSE OF HAPPINESS</p>\n    <h1>Life begins<br>after coffee.</h1>\n    <p>Fresh coffee, cozy moments, and good vibes.</p>\n    <button id=\"orderBtn\">Explore Our Coffee</button>\n    <div id=\"message\"></div>\n  </main>\n  <script src=\"script.js\"></script>\n</body>\n</html>",
+    "userId": "3843ddd751e1827a1c5907cf",
+    "folderId": "312f0784bebbd40207bcb236",
+    "language": "javascript",
+    "versions": [
+      {
+        "code": "",
+        "createdAt": "2026-10-09T12:48:28.898Z"
+      },
+      {
+        "code": "\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Brew Cafe</title>\n  <link rel=\"stylesheet\" href=\"style.css\">\n</head>\n<body>\n  <nav><h2>BrewCafe</h2><a href=\"#home\">Home</a></nav>\n  <main id=\"home\">\n    <p class=\"tag\">YOUR DAILY DOSE OF HAPPINESS</p>\n    <h1>Life begins<br>after coffee.</h1>\n    <p>Fresh coffee, cozy moments, and good vibes.</p>\n    <button id=\"orderBtn\">Explore Our Coffee</button>\n    <div id=\"message\"></div>\n  </main>\n  <script src=\"script.js\"></script>\n</body>\n</html>",
+        "createdAt": "2026-10-09T12:48:34.915Z"
+      },
+      {
+        "code": "\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Brew Cafe</title>\n  <link rel=\"stylesheet\" href=\"style.css\">\n</head>\n<body>\n  <nav><h2>BrewCafe</h2><a href=\"#home\">Home</a></nav>\n  <main id=\"home\">\n    <p class=\"tag\">YOUR DAILY DOSE OF HAPPINESS</p>\n    <h1>Life begins<br>after coffee.</h1>\n    <p>Fresh coffee, cozy moments, and good vibes.</p>\n    <button id=\"orderBtn\">Explore Our Coffee</button>\n    <div id=\"message\"></div>\n  </main>\n  <script src=\"script.js\"></script>\n</body>\n</html>",
+        "createdAt": "2026-10-09T12:48:52.459Z"
+      },
+      {
+        "code": "\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Brew Cafe</title>\n  <link rel=\"stylesheet\" href=\"style.css\">\n</head>\n<body>\n  <nav><h2>BrewCafe</h2><a href=\"#home\">Home</a></nav>\n  <main id=\"home\">\n    <p class=\"tag\">YOUR DAILY DOSE OF HAPPINESS</p>\n    <h1>Life begins<br>after coffee.</h1>\n    <p>Fresh coffee, cozy moments, and good vibes.</p>\n    <button id=\"orderBtn\">Explore Our Coffee</button>\n    <div id=\"message\"></div>\n  </main>\n  <script src=\"script.js\"></script>\n</body>\n</html>",
+        "createdAt": "2026-10-09T12:52:28.214Z"
+      },
+      {
+        "code": "\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Brew Cafe</title>\n  <link rel=\"stylesheet\" href=\"style.css\">\n</head>\n<body>\n  <nav><h2>BrewCafe</h2><a href=\"#home\">Home</a></nav>\n  <main id=\"home\">\n    <p class=\"tag\">YOUR DAILY DOSE OF HAPPINESS</p>\n    <h1>Life begins<br>after coffee.</h1>\n    <p>Fresh coffee, cozy moments, and good vibes.</p>\n    <button id=\"orderBtn\">Explore Our Coffee</button>\n    <div id=\"message\"></div>\n  </main>\n  <script src=\"script.js\"></script>\n</body>\n</html>",
+        "createdAt": "2026-10-09T12:52:40.923Z"
+      },
+      {
+        "code": "\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Brew Cafe</title>\n  <link rel=\"stylesheet\" href=\"style.css\">\n</head>\n<body>\n  <nav><h2>BrewCafe</h2><a href=\"#home\">Home</a></nav>\n  <main id=\"home\">\n    <p class=\"tag\">YOUR DAILY DOSE OF HAPPINESS</p>\n    <h1>Life begins<br>after coffee.</h1>\n    <p>Fresh coffee, cozy moments, and good vibes.</p>\n    <button id=\"orderBtn\">Explore Our Coffee</button>\n    <div id=\"message\"></div>\n  </main>\n  <script src=\"script.js\"></script>\n</body>\n</html>",
+        "createdAt": "2026-10-09T12:52:55.383Z"
+      },
+      {
+        "code": "\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Brew Cafe</title>\n  <link rel=\"stylesheet\" href=\"style.css\">\n</head>\n<body>\n  <nav><h2>BrewCafe</h2><a href=\"#home\">Home</a></nav>\n  <main id=\"home\">\n    <p class=\"tag\">YOUR DAILY DOSE OF HAPPINESS</p>\n    <h1>Life begins<br>after coffee.</h1>\n    <p>Fresh coffee, cozy moments, and good vibes.</p>\n    <button id=\"orderBtn\">Explore Our Coffee</button>\n    <div id=\"message\"></div>\n  </main>\n  <script src=\"script.js\"></script>\n</body>\n</html>",
+        "createdAt": "2026-10-09T12:52:59.968Z"
+      },
+      {
+        "code": "\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Brew Cafe</title>\n  <link rel=\"stylesheet\" href=\"style.css\">\n</head>\n<body>\n  <nav><h2>BrewCafe</h2><a href=\"#home\">Home</a></nav>\n  <main id=\"home\">\n    <p class=\"tag\">YOUR DAILY DOSE OF HAPPINESS</p>\n    <h1>Life begins<br>after coffee.</h1>\n    <p>Fresh coffee, cozy moments, and good vibes.</p>\n    <button id=\"orderBtn\">Explore Our Coffee</button>\n    <div id=\"message\"></div>\n  </main>\n  <script src=\"script.js\"></script>\n</body>\n</html>",
+        "createdAt": "2026-10-09T12:53:44.415Z"
+      }
+    ],
+    "createdAt": "2026-10-09T12:48:28.898Z",
+    "updatedAt": "2026-10-09T12:53:44.415Z"
+  },
+  {
+    "_id": "e571f3b9265c771b35d878bf",
+    "name": "style.css",
+    "code": "\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Brew Cafe</title>\n  <link rel=\"stylesheet\" href=\"style.css\">\n</head>\n<body>\n  <nav><h2>BrewCafe</h2><a href=\"#home\">Home</a></nav>\n  <main id=\"home\">\n    <p class=\"tag\">YOUR DAILY DOSE OF HAPPINESS</p>\n    <h1>Life begins<br>after coffee.</h1>\n    <p>Fresh coffee, cozy moments, and good vibes.</p>\n    <button id=\"orderBtn\">Explore Our Coffee</button>\n    <div id=\"message\"></div>\n  </main>\n  <script src=\"script.js\"></script>\n</body>\n</html>",
+    "userId": "3843ddd751e1827a1c5907cf",
+    "folderId": "312f0784bebbd40207bcb236",
+    "language": "javascript",
+    "versions": [
+      {
+        "code": "",
+        "createdAt": "2026-10-09T12:49:20.445Z"
+      },
+      {
+        "code": "\n* { box-sizing: border-box; }\nbody {\n  margin: 0;\n  font-family: Arial, sans-serif;\n  background: #17130f;\n  color: #fff4e6;\n}\nnav {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 20px 8%;\n  border-bottom: 1px solid #45372b;\n}\nnav h2 { color: #d9a066; }\nnav a { color: white; text-decoration: none; }\nmain { padding: 100px 10%; }\n.tag { color: #d9a066; letter-spacing: 3px; }\nh1 { font-size: clamp(42px, 7vw, 76px); margin: 20px 0; }\nmain > p:not(.tag) { color: #c8b9a8; }\nbutton {\n  margin-top: 20px;\n  padding: 14px 24px;\n  background: #d9a066;\n  color: #17130f;\n  border: 0;\n  border-radius: 8px;\n  cursor: pointer;\n  font-weight: bold;\n}\nbutton:hover { background: #f0bd83; }\n#message { color: #d9a066; margin-top: 20px; }",
+        "createdAt": "2026-10-09T12:49:32.557Z"
+      },
+      {
+        "code": "\n* { box-sizing: border-box; }\nbody {\n  margin: 0;\n  font-family: Arial, sans-serif;\n  background: #17130f;\n  color: #fff4e6;\n}\nnav {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 20px 8%;\n  border-bottom: 1px solid #45372b;\n}\nnav h2 { color: #d9a066; }\nnav a { color: white; text-decoration: none; }\nmain { padding: 100px 10%; }\n.tag { color: #d9a066; letter-spacing: 3px; }\nh1 { font-size: clamp(42px, 7vw, 76px); margin: 20px 0; }\nmain > p:not(.tag) { color: #c8b9a8; }\nbutton {\n  margin-top: 20px;\n  padding: 14px 24px;\n  background: #d9a066;\n  color: #17130f;\n  border: 0;\n  border-radius: 8px;\n  cursor: pointer;\n  font-weight: bold;\n}\nbutton:hover { background: #f0bd83; }\n#message { color: #d9a066; margin-top: 20px; }",
+        "createdAt": "2026-10-09T12:49:38.989Z"
+      },
+      {
+        "code": "\ndocument.getElementById(\"orderBtn\").onclick = function () {\n  document.getElementById(\"message\").textContent =\n    \"Welcome! Your perfect coffee awaits.\";\n};",
+        "createdAt": "2026-10-09T12:50:03.498Z"
+      },
+      {
+        "code": "\n* { box-sizing: border-box; }\nbody {\n  margin: 0;\n  font-family: Arial, sans-serif;\n  background: #17130f;\n  color: #fff4e6;\n}\nnav {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 20px 8%;\n  border-bottom: 1px solid #45372b;\n}\nnav h2 { color: #d9a066; }\nnav a { color: white; text-decoration: none; }\nmain { padding: 100px 10%; }\n.tag { color: #d9a066; letter-spacing: 3px; }\nh1 { font-size: clamp(42px, 7vw, 76px); margin: 20px 0; }\nmain > p:not(.tag) { color: #c8b9a8; }\nbutton {\n  margin-top: 20px;\n  padding: 14px 24px;\n  background: #d9a066;\n  color: #17130f;\n  border: 0;\n  border-radius: 8px;\n  cursor: pointer;\n  font-weight: bold;\n}\nbutton:hover { background: #f0bd83; }\n#message { color: #d9a066; margin-top: 20px; }",
+        "createdAt": "2026-10-09T12:51:21.350Z"
+      },
+      {
+        "code": "\n* { box-sizing: border-box; }\nbody {\n  margin: 0;\n  font-family: Arial, sans-serif;\n  background: #17130f;\n  color: #fff4e6;\n}\nnav {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 20px 8%;\n  border-bottom: 1px solid #45372b;\n}\nnav h2 { color: #d9a066; }\nnav a { color: white; text-decoration: none; }\nmain { padding: 100px 10%; }\n.tag { color: #d9a066; letter-spacing: 3px; }\nh1 { font-size: clamp(42px, 7vw, 76px); margin: 20px 0; }\nmain > p:not(.tag) { color: #c8b9a8; }\nbutton {\n  margin-top: 20px;\n  padding: 14px 24px;\n  background: #d9a066;\n  color: #17130f;\n  border: 0;\n  border-radius: 8px;\n  cursor: pointer;\n  font-weight: bold;\n}\nbutton:hover { background: #f0bd83; }\n#message { color: #d9a066; margin-top: 20px; }",
+        "createdAt": "2026-10-09T12:52:35.096Z"
+      },
+      {
+        "code": "\n* { box-sizing: border-box; }\nbody {\n  margin: 0;\n  font-family: Arial, sans-serif;\n  background: #17130f;\n  color: #fff4e6;\n}\nnav {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 20px 8%;\n  border-bottom: 1px solid #45372b;\n}\nnav h2 { color: #d9a066; }\nnav a { color: white; text-decoration: none; }\nmain { padding: 100px 10%; }\n.tag { color: #d9a066; letter-spacing: 3px; }\nh1 { font-size: clamp(42px, 7vw, 76px); margin: 20px 0; }\nmain > p:not(.tag) { color: #c8b9a8; }\nbutton {\n  margin-top: 20px;\n  padding: 14px 24px;\n  background: #d9a066;\n  color: #17130f;\n  border: 0;\n  border-radius: 8px;\n  cursor: pointer;\n  font-weight: bold;\n}\nbutton:hover { background: #f0bd83; }\n#message { color: #d9a066; margin-top: 20px; }",
+        "createdAt": "2026-10-09T12:52:49.595Z"
+      },
+      {
+        "code": "\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Brew Cafe</title>\n  <link rel=\"stylesheet\" href=\"style.css\">\n</head>\n<body>\n  <nav><h2>BrewCafe</h2><a href=\"#home\">Home</a></nav>\n  <main id=\"home\">\n    <p class=\"tag\">YOUR DAILY DOSE OF HAPPINESS</p>\n    <h1>Life begins<br>after coffee.</h1>\n    <p>Fresh coffee, cozy moments, and good vibes.</p>\n    <button id=\"orderBtn\">Explore Our Coffee</button>\n    <div id=\"message\"></div>\n  </main>\n  <script src=\"script.js\"></script>\n</body>\n</html>",
+        "createdAt": "2026-10-09T12:53:09.742Z"
+      }
+    ],
+    "createdAt": "2026-10-09T12:49:20.445Z",
+    "updatedAt": "2026-10-09T12:53:09.742Z"
+  },
+  {
+    "_id": "ba07c9210f247c2c6e804b10",
+    "name": "script.js",
+    "code": "\n* { box-sizing: border-box; }\nbody {\n  margin: 0;\n  font-family: Arial, sans-serif;\n  background: #17130f;\n  color: #fff4e6;\n}\nnav {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 20px 8%;\n  border-bottom: 1px solid #45372b;\n}\nnav h2 { color: #d9a066; }\nnav a { color: white; text-decoration: none; }\nmain { padding: 100px 10%; }\n.tag { color: #d9a066; letter-spacing: 3px; }\nh1 { font-size: clamp(42px, 7vw, 76px); margin: 20px 0; }\nmain > p:not(.tag) { color: #c8b9a8; }\nbutton {\n  margin-top: 20px;\n  padding: 14px 24px;\n  background: #d9a066;\n  color: #17130f;\n  border: 0;\n  border-radius: 8px;\n  cursor: pointer;\n  font-weight: bold;\n}\nbutton:hover { background: #f0bd83; }\n#message { color: #d9a066; margin-top: 20px; }",
+    "userId": "3843ddd751e1827a1c5907cf",
+    "folderId": "312f0784bebbd40207bcb236",
+    "language": "javascript",
+    "versions": [
+      {
+        "code": "",
+        "createdAt": "2026-10-09T12:49:51.896Z"
+      },
+      {
+        "code": "\ndocument.getElementById(\"orderBtn\").onclick = function () {\n  document.getElementById(\"message\").textContent =\n    \"Welcome! Your perfect coffee awaits.\";\n};",
+        "createdAt": "2026-10-09T12:49:59.820Z"
+      },
+      {
+        "code": "\n* { box-sizing: border-box; }\nbody {\n  margin: 0;\n  font-family: Arial, sans-serif;\n  background: #17130f;\n  color: #fff4e6;\n}\nnav {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 20px 8%;\n  border-bottom: 1px solid #45372b;\n}\nnav h2 { color: #d9a066; }\nnav a { color: white; text-decoration: none; }\nmain { padding: 100px 10%; }\n.tag { color: #d9a066; letter-spacing: 3px; }\nh1 { font-size: clamp(42px, 7vw, 76px); margin: 20px 0; }\nmain > p:not(.tag) { color: #c8b9a8; }\nbutton {\n  margin-top: 20px;\n  padding: 14px 24px;\n  background: #d9a066;\n  color: #17130f;\n  border: 0;\n  border-radius: 8px;\n  cursor: pointer;\n  font-weight: bold;\n}\nbutton:hover { background: #f0bd83; }\n#message { color: #d9a066; margin-top: 20px; }",
+        "createdAt": "2026-10-09T12:51:22.915Z"
+      },
+      {
+        "code": "\n* { box-sizing: border-box; }\nbody {\n  margin: 0;\n  font-family: Arial, sans-serif;\n  background: #17130f;\n  color: #fff4e6;\n}\nnav {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 20px 8%;\n  border-bottom: 1px solid #45372b;\n}\nnav h2 { color: #d9a066; }\nnav a { color: white; text-decoration: none; }\nmain { padding: 100px 10%; }\n.tag { color: #d9a066; letter-spacing: 3px; }\nh1 { font-size: clamp(42px, 7vw, 76px); margin: 20px 0; }\nmain > p:not(.tag) { color: #c8b9a8; }\nbutton {\n  margin-top: 20px;\n  padding: 14px 24px;\n  background: #d9a066;\n  color: #17130f;\n  border: 0;\n  border-radius: 8px;\n  cursor: pointer;\n  font-weight: bold;\n}\nbutton:hover { background: #f0bd83; }\n#message { color: #d9a066; margin-top: 20px; }",
+        "createdAt": "2026-10-09T12:52:31.613Z"
+      },
+      {
+        "code": "\n* { box-sizing: border-box; }\nbody {\n  margin: 0;\n  font-family: Arial, sans-serif;\n  background: #17130f;\n  color: #fff4e6;\n}\nnav {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 20px 8%;\n  border-bottom: 1px solid #45372b;\n}\nnav h2 { color: #d9a066; }\nnav a { color: white; text-decoration: none; }\nmain { padding: 100px 10%; }\n.tag { color: #d9a066; letter-spacing: 3px; }\nh1 { font-size: clamp(42px, 7vw, 76px); margin: 20px 0; }\nmain > p:not(.tag) { color: #c8b9a8; }\nbutton {\n  margin-top: 20px;\n  padding: 14px 24px;\n  background: #d9a066;\n  color: #17130f;\n  border: 0;\n  border-radius: 8px;\n  cursor: pointer;\n  font-weight: bold;\n}\nbutton:hover { background: #f0bd83; }\n#message { color: #d9a066; margin-top: 20px; }",
+        "createdAt": "2026-10-09T12:52:43.923Z"
+      }
+    ],
+    "createdAt": "2026-10-09T12:49:51.896Z",
+    "updatedAt": "2026-10-09T12:52:43.923Z"
+  }
+]
