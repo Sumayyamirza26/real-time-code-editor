@@ -84,6 +84,10 @@ const EditorPage = () => {
     { id: "scratch", name: "untitled.js", language: "javascript", code: "", dirty: false, folderId: null }
   ]);
   const [activeTabId, setActiveTabId] = useState("scratch");
+  const activeTabIdRef = useRef("scratch");
+  useEffect(() => {
+    activeTabIdRef.current = activeTabId;
+  });
 
   // Live Preview state
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -398,7 +402,18 @@ const EditorPage = () => {
           toast.success(`${username} joined the room.`);
         }
         setClients(clients);
-        s.emit(ACTIONS.SYNC_CODE, { code: codeRef.current, socketId });
+        // Only existing members answer — the newcomer must not echo its own (empty) code back
+        if (socketId && socketId !== s.id) {
+          s.emit(ACTIONS.SYNC_CODE, { code: codeRef.current, socketId });
+        }
+      });
+
+      // Apply a collaborator's language switch to the active tab (never re-emitted)
+      s.on(ACTIONS.LANGUAGE_CHANGE, ({ language }) => {
+        if (!language) return;
+        setSelectedLanguage(language);
+        const tabId = activeTabIdRef.current;
+        setOpenTabs((prev) => prev.map((t) => (t.id === tabId ? { ...t, language } : t)));
       });
 
       s.on(ACTIONS.DISCONNECTED, ({ socketId, username }) => {
@@ -451,6 +466,7 @@ const EditorPage = () => {
           ACTIONS.CODE_RESULT,
           ACTIONS.DOCKER_CODE_RESULT,
           ACTIONS.TERMINAL_OUTPUT,
+          ACTIONS.LANGUAGE_CHANGE,
         ].forEach((ev) => s.off(ev));
       }
     };

@@ -250,6 +250,12 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on(ACTIONS.LANGUAGE_CHANGE, ({ roomId, language }) => {
+    if (roomId && language) {
+      socket.in(roomId).emit(ACTIONS.LANGUAGE_CHANGE, { language });
+    }
+  });
+
   // ── Standard (non-Docker) execution ───────────────────────────────────────
   socket.on(ACTIONS.RUN_CODE, ({ roomId, code, language, token }) => {
     if (!verifySocketToken(token)) {
