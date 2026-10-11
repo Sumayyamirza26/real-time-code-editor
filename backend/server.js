@@ -8,6 +8,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
+const jwt = require("jsonwebtoken");
+const auth = require("./middleware/auth");
 const Room = require("./models/Room");
 const CodeExecutor = require("./utils/codeExecutor");
 require("dotenv").config();
@@ -77,10 +79,13 @@ app.use("/api/files", require("./routes/files"));
 app.use("/api/folders", require("./routes/folders"));
 
 // POST /execute endpoint – simple one-shot HTTP execution (no stdin)
-app.post("/execute", executeLimiter, (req, res) => {
+app.post("/execute", executeLimiter, auth, (req, res) => {
   const { code, language } = req.body;
   if (!code || !language) {
     return res.status(400).json({ error: "code and language are required." });
+  }
+  if (String(code).length > 500000) {
+    return res.status(400).json({ error: "code exceeds 500KB limit." });
   }
 
   const executor = new CodeExecutor(null, code, language, false);
@@ -116,6 +121,15 @@ const userSocketMap = {};
 // Track active executors per socket so TERMINAL_INPUT can write to them
 const socketExecutors = {};
 
+function verifySocketToken(token) {
+  if (!token) return null;
+  try {
+    return jwt.verify(token, process.env.JWT_SECRET);
+  } catch {
+    return null;
+  }
+}
+
 function getAllConnectedClients(roomId) {
   return Array.from(io.sockets.adapter.rooms.get(roomId) || []).map(
     (socketId) => {
@@ -138,15 +152,7 @@ io.on("connection", (socket) => {
       socket.join(roomId);
 
       // Verify token optionally for authenticated users
-      let user = null;
-      if (token && process.env.JWT_SECRET) {
-        try {
-          const jwt = require("jsonwebtoken");
-          user = jwt.verify(token, process.env.JWT_SECRET);
-        } catch (jwtErr) {
-          // Guest or invalid token allowed for collaboration
-        }
-      }
+      const user = verifySocketToken(token);
 
       // Check room in DB if DB is connected
       let room = null;
@@ -239,7 +245,19 @@ io.on("connection", (socket) => {
   });
 
   // ── Standard (non-Docker) execution ───────────────────────────────────────
-  socket.on(ACTIONS.RUN_CODE, ({ roomId, code, language }) => {
+  socket.on(ACTIONS.RUN_CODE, ({ roomId, code, language, token }) => {
+    if (!verifySocketToken(token)) {
+      socket.emit(ACTIONS.CODE_RESULT, { result: null, error: "Authentication required to run code." });
+      return;
+    }
+    if (!roomId || !code || !language) {
+      socket.emit(ACTIONS.CODE_RESULT, { result: null, error: "Missing roomId, code, or language." });
+      return;
+    }
+    if (String(code).length > 500000) {
+      socket.emit(ACTIONS.CODE_RESULT, { result: null, error: "Code exceeds 500KB limit." });
+      return;
+    }
     // Kill any existing executor for this socket before starting a new one
     if (socketExecutors[socket.id]) {
       socketExecutors[socket.id].kill();
@@ -286,12 +304,20 @@ io.on("connection", (socket) => {
   });
 
   // ── Docker execution ───────────────────────────────────────────────────────
-  socket.on(ACTIONS.DOCKER_RUN_CODE, ({ roomId, code, language }) => {
+  socket.on(ACTIONS.DOCKER_RUN_CODE, ({ roomId, code, language, token }) => {
+    if (!verifySocketToken(token)) {
+      socket.emit(ACTIONS.DOCKER_CODE_RESULT, { result: null, error: "Authentication required to run code." });
+      return;
+    }
     if (!roomId || !code || !language) {
       socket.emit(ACTIONS.DOCKER_CODE_RESULT, {
         result: null,
         error: "Missing roomId, code, or language.",
       });
+      return;
+    }
+    if (String(code).length > 500000) {
+      socket.emit(ACTIONS.DOCKER_CODE_RESULT, { result: null, error: "Code exceeds 500KB limit." });
       return;
     }
 
@@ -364,6 +390,10 @@ io.on("connection", (socket) => {
 
   socket.on(ACTIONS.SAVE_VERSION, async ({ roomId, snapshot, token }) => {
     try {
+      if (!verifySocketToken(token)) {
+        socket.emit("version_saved", { message: "Authentication required" });
+        return;
+      }
       if (!isDbConnected()) {
         socket.emit("version_saved", { message: "DB not connected" });
         return;
