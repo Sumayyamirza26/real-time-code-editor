@@ -111,9 +111,15 @@ app.post("/execute", executeLimiter, auth, (req, res) => {
   });
 });
 
-app.use(express.static("../frontend/build"));
-app.use((req, res, next) => {
-  res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
+const buildDir = path.join(__dirname, "../frontend/build");
+app.use(express.static(buildDir));
+app.get("/api/*", (req, res) => {
+  res.status(404).json({ message: "Not found" });
+});
+app.get("*", (req, res, next) => {
+  res.sendFile(path.join(buildDir, "index.html"), (err) => {
+    if (err) next();
+  });
 });
 
 const userSocketMap = {};
