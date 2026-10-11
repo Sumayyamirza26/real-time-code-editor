@@ -1317,19 +1317,26 @@ const EditorPage = () => {
       {/* ── SAVE FILE MODAL ──────────────────────────────────────────────── */}
       {showSaveModal && (
         <div className="modalOverlay" onClick={(e) => { if (e.target === e.currentTarget) setShowSaveModal(false); }}>
-          <div className="modalBox">
-            <h3 className="modalTitle">💾 Save File</h3>
+          <div
+            className="modalBox"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="save-modal-title"
+            onKeyDown={(e) => { if (e.key === "Escape") setShowSaveModal(false); }}
+          >
+            <h3 className="modalTitle" id="save-modal-title">💾 Save File</h3>
             <p className="modalHint">
               Language: <strong>{langInfo?.icon} {langInfo?.label}</strong> — extension will be <code>.{langInfo?.ext}</code>
             </p>
-            <label className="modalLabel">File name</label>
+            <label className="modalLabel" htmlFor="save-file-name">File name</label>
             <input
+              id="save-file-name"
               className="modalInput"
               type="text"
               autoFocus
               value={saveModalName}
               onChange={(e) => { setSaveModalName(e.target.value); setSaveModalError(""); }}
-              onKeyDown={(e) => { if (e.key === "Enter") handleSaveModalConfirm(); if (e.key === "Escape") setShowSaveModal(false); }}
+              onKeyDown={(e) => { if (e.key === "Enter") handleSaveModalConfirm(); }}
               placeholder={`e.g. solution.${langInfo?.ext}`}
             />
             {saveModalError && <p className="modalError">{saveModalError}</p>}
@@ -1346,22 +1353,48 @@ const EditorPage = () => {
       {/* ── INLINE AUTH MODAL ────────────────────────────────────────────── */}
       {showAuthModal && (
         <div className="modalOverlay" onClick={(e) => { if (e.target === e.currentTarget) setShowAuthModal(false); }}>
-          <div className="modalBox">
-            <h3 className="modalTitle">🔒 Authentication Required</h3>
+          <div
+            className="modalBox"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="auth-modal-title"
+            onKeyDown={(e) => { if (e.key === "Escape") setShowAuthModal(false); }}
+          >
+            <h3 className="modalTitle" id="auth-modal-title">🔒 Authentication Required</h3>
             <p className="modalHint">
               Log in or create an account to save files and manage your workspace.
             </p>
 
-            <div className="authTabs">
+            <div className="authTabs" role="tablist" aria-label="Authentication mode">
               <div
                 className={`authTab ${authTab === "login" ? "active" : ""}`}
+                role="tab"
+                tabIndex={0}
+                aria-selected={authTab === "login"}
                 onClick={() => { setAuthTab("login"); setAuthError(""); }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setAuthTab("login");
+                    setAuthError("");
+                  }
+                }}
               >
                 Log In
               </div>
               <div
                 className={`authTab ${authTab === "signup" ? "active" : ""}`}
+                role="tab"
+                tabIndex={0}
+                aria-selected={authTab === "signup"}
                 onClick={() => { setAuthTab("signup"); setAuthError(""); }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setAuthTab("signup");
+                    setAuthError("");
+                  }
+                }}
               >
                 Sign Up
               </div>
@@ -1370,8 +1403,9 @@ const EditorPage = () => {
             <form onSubmit={handleAuthSubmit}>
               {authTab === "signup" && (
                 <div style={{ marginBottom: "12px" }}>
-                  <label className="modalLabel">Username</label>
+                  <label className="modalLabel" htmlFor="auth-username">Username</label>
                   <input
+                    id="auth-username"
                     className="modalInput"
                     type="text"
                     required
@@ -1383,8 +1417,9 @@ const EditorPage = () => {
               )}
 
               <div style={{ marginBottom: "12px" }}>
-                <label className="modalLabel">Email</label>
+                <label className="modalLabel" htmlFor="auth-email">Email</label>
                 <input
+                  id="auth-email"
                   className="modalInput"
                   type="email"
                   required
@@ -1395,8 +1430,9 @@ const EditorPage = () => {
               </div>
 
               <div style={{ marginBottom: "12px" }}>
-                <label className="modalLabel">Password</label>
+                <label className="modalLabel" htmlFor="auth-password">Password</label>
                 <input
+                  id="auth-password"
                   className="modalInput"
                   type="password"
                   required
