@@ -491,7 +491,7 @@ const EditorPage = () => {
       roomId,
       code: codeRef.current,
       language: selectedLanguage,
-      ...(runMode === "standard" ? { token: localStorage.getItem("token") || undefined } : {}),
+      token: localStorage.getItem("token") || undefined,
     };
     if (socketRef.current) socketRef.current.emit(action, payload);
   };
