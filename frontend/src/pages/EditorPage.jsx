@@ -1066,7 +1066,8 @@ const EditorPage = () => {
           <div className="toolbarSection toolbarSectionRight">
             {hasUnsavedChanges && (
               <span className="unsavedIndicator" title="Unsaved changes">
-                <span className="unsavedDot" />
+                <span className="unsavedDot" aria-hidden="true" />
+                <span className="srOnly">Unsaved changes</span>
               </span>
             )}
             {autoSaveStatus === "saving" && <span className="autoSaveTag saving">Saving…</span>}
@@ -1213,7 +1214,7 @@ const EditorPage = () => {
                       {languages.find((l) => l.value === tab.language)?.icon || "📄"}
                     </span>
                     <span className="editorTabTitle">{tab.name}</span>
-                    {tab.dirty && <span className="editorTabUnsaved" title="Unsaved changes">●</span>}
+                    {tab.dirty && <span className="editorTabUnsaved" title="Unsaved changes" aria-hidden="true">●</span>}
                     <button
                       className="editorTabClose"
                       onClick={(e) => handleCloseTab(tab.id, e)}
@@ -1291,12 +1292,13 @@ const EditorPage = () => {
                   <button className="clearBtn" onClick={clearTerminal}>Clear</button>
                 </div>
               </div>
-              <pre className="terminalOutput">{terminalOutput.join("")}</pre>
+              <pre className="terminalOutput" role="log" aria-live="polite" aria-label="Terminal output">{terminalOutput.join("")}</pre>
               <div style={{ display: "flex", alignItems: "center", marginTop: "10px" }}>
-                <span style={{ color: "#50fa7b", marginRight: "5px" }}>❯</span>
+                <span style={{ color: "#50fa7b", marginRight: "5px" }} aria-hidden="true">❯</span>
                 <input
                   type="text"
                   className="terminalInput"
+                  aria-label="Terminal input"
                   style={{ border: "none", paddingLeft: 0, flex: 1 }}
                   value={terminalInput}
                   onChange={(e) => setTerminalInput(e.target.value)}

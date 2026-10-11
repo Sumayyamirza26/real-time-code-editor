@@ -183,7 +183,7 @@ function TreeNode({
         ) : (
           <span className={`tree-label${isActive ? " tree-label-active" : ""}`}>
             {node.name}
-            {hasUnsaved && <span className="tree-unsaved-dot" title="Unsaved changes">●</span>}
+            {hasUnsaved && <span className="tree-unsaved-dot" title="Unsaved changes" role="img" aria-label="Unsaved changes">●</span>}
           </span>
         )}
 
