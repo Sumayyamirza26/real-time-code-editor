@@ -178,12 +178,12 @@ function TreeNode({
           <span className="tree-actions" onClick={(e) => e.stopPropagation()}>
             {isFolder && (
               <>
-                <button className="tree-action-btn" title="New File"   onClick={() => onNewFile(node._id)}>+📄</button>
-                <button className="tree-action-btn" title="New Folder" onClick={() => onNewFolder(node._id)}>+📁</button>
+                <button className="tree-action-btn" title="New File" aria-label={`New file in ${node.name}`} onClick={() => onNewFile(node._id)}>+📄</button>
+                <button className="tree-action-btn" title="New Folder" aria-label={`New folder in ${node.name}`} onClick={() => onNewFolder(node._id)}>+📁</button>
               </>
             )}
-            <button className="tree-action-btn" title="Rename" onClick={() => setEditingId(node._id, "rename")}>✏️</button>
-            <button className="tree-action-btn" title="Delete" onClick={() => onDelete(node)}>🗑️</button>
+            <button className="tree-action-btn" title="Rename" aria-label={`Rename ${node.name}`} onClick={() => setEditingId(node._id, "rename")}>✏️</button>
+            <button className="tree-action-btn" title="Delete" aria-label={`Delete ${node.name}`} onClick={() => onDelete(node)}>🗑️</button>
           </span>
         )}
       </div>
@@ -676,11 +676,12 @@ export default function FileExplorer({
     >
       {/* Explorer toolbar */}
       <div className="explorer-toolbar">
-        <button className="explorer-toolbar-btn" title="New File"   onClick={() => handleNewFile(null)}>📄</button>
-        <button className="explorer-toolbar-btn" title="New Folder" onClick={() => handleNewFolder(null)}>📁</button>
+        <button className="explorer-toolbar-btn" title="New File" aria-label="New File" onClick={() => handleNewFile(null)}>📄</button>
+        <button className="explorer-toolbar-btn" title="New Folder" aria-label="New Folder" onClick={() => handleNewFolder(null)}>📁</button>
         <button
           className="explorer-toolbar-btn"
           title="Refresh"
+          aria-label="Refresh"
           onClick={() => refresh()}
           style={{ marginLeft: "auto" }}
         >

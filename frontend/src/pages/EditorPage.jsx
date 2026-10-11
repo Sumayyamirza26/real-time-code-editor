@@ -969,6 +969,7 @@ const EditorPage = () => {
               style={{ display: window.innerWidth <= 768 ? "flex" : "none" }}
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               title="Toggle sidebar"
+              aria-label="Toggle sidebar"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="3" y1="12" x2="21" y2="12" />
@@ -983,6 +984,7 @@ const EditorPage = () => {
                 onChange={handleLanguageChange}
                 className="toolbarSelect"
                 title="Select programming language"
+                aria-label="Select programming language"
               >
                 {languages.map((lang) => (
                   <option key={lang.value} value={lang.value}>
@@ -1035,6 +1037,7 @@ const EditorPage = () => {
                     onChange={(e) => setRunMode(e.target.value)}
                     className="runModeSelect"
                     title="Execution environment"
+                    aria-label="Execution environment"
                   >
                     <option value="standard">Standard Run</option>
                     <option value="docker">Docker Sandbox</option>
@@ -1205,6 +1208,7 @@ const EditorPage = () => {
                       className="editorTabClose"
                       onClick={(e) => handleCloseTab(tab.id, e)}
                       title="Close tab"
+                      aria-label={`Close ${tab.name}`}
                     >
                       ✕
                     </button>

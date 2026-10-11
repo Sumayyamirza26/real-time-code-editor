@@ -129,6 +129,7 @@ export default function LivePreview({
               className={`deviceBtn ${deviceMode === "desktop" ? "active" : ""}`}
               onClick={() => setDeviceMode("desktop")}
               title="Desktop (1024px)"
+              aria-label="Desktop preview (1024px)"
             >
               🖥️
             </button>
@@ -136,6 +137,7 @@ export default function LivePreview({
               className={`deviceBtn ${deviceMode === "tablet" ? "active" : ""}`}
               onClick={() => setDeviceMode("tablet")}
               title="Tablet (768px)"
+              aria-label="Tablet preview (768px)"
             >
               📱
             </button>
@@ -143,6 +145,7 @@ export default function LivePreview({
               className={`deviceBtn ${deviceMode === "mobile" ? "active" : ""}`}
               onClick={() => setDeviceMode("mobile")}
               title="Mobile (375px)"
+              aria-label="Mobile preview (375px)"
             >
               📲
             </button>
@@ -155,6 +158,7 @@ export default function LivePreview({
             className="previewActionIconBtn"
             onClick={handleRefresh}
             title="Reload Preview"
+            aria-label="Reload Preview"
           >
             ↻
           </button>
@@ -162,6 +166,7 @@ export default function LivePreview({
             className="previewActionIconBtn"
             onClick={handlePopOut}
             title="Open Preview in New Tab"
+            aria-label="Open Preview in New Tab"
           >
             ↗
           </button>
@@ -169,6 +174,7 @@ export default function LivePreview({
             className="previewActionIconBtn closePreviewBtn"
             onClick={onClose}
             title="Close Preview"
+            aria-label="Close Preview"
           >
             ✕
           </button>
