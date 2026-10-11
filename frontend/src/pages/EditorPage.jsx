@@ -1191,12 +1191,22 @@ const EditorPage = () => {
           <div className="editorMainColumn">
             {/* VS Code-style Editor Tabs */}
             {openTabs.length > 0 && (
-              <div className="editorTabsBar">
+              <div className="editorTabsBar" role="tablist" aria-label="Open files">
                 {openTabs.map((tab) => (
                   <div
                     key={tab.id}
                     className={`editorTab ${tab.id === activeTabId ? "active" : ""}`}
+                    role="tab"
+                    tabIndex={0}
+                    aria-selected={tab.id === activeTabId}
+                    aria-label={`${tab.name}${tab.dirty ? ", unsaved changes" : ""}`}
                     onClick={() => handleSelectTab(tab.id)}
+                    onKeyDown={(e) => {
+                      if ((e.key === "Enter" || e.key === " ") && e.target === e.currentTarget) {
+                        e.preventDefault();
+                        handleSelectTab(tab.id);
+                      }
+                    }}
                     title={tab.name}
                   >
                     <span className="editorTabIcon">

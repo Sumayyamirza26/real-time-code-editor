@@ -141,13 +141,27 @@ function TreeNode({
     { icon: "🗑️", label: "Delete", action: () => onDelete(node), danger: true },
   ];
 
+  const activate = () => { if (isFile) onFileClick(node); else setOpen(!open); };
+
   return (
     <div>
       {/* Node row */}
       <div
         className={`tree-row${isActive ? " tree-row-active" : ""}${isFolder ? " tree-folder" : ""}`}
         style={{ paddingLeft: 8 + indent }}
-        onClick={() => { if (isFile) onFileClick(node); else setOpen(!open); }}
+        role="treeitem"
+        tabIndex={0}
+        aria-selected={isFile ? isActive : undefined}
+        aria-expanded={isFolder ? open : undefined}
+        onClick={activate}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            // Let inner buttons/inputs handle their own keys
+            if (e.target.closest("button,input")) return;
+            e.preventDefault();
+            activate();
+          }
+        }}
         onContextMenu={handleCtxMenu}
         title={node.name}
       >
@@ -201,7 +215,7 @@ function TreeNode({
 
       {/* Children */}
       {isFolder && open && node.children && node.children.length > 0 && (
-        <div>
+        <div role="group" aria-label={`${node.name} contents`}>
           {node.children.map((child) => (
             <TreeNode
               key={child._id}
@@ -710,6 +724,7 @@ export default function FileExplorer({
         </div>
       )}
 
+      <div role="tree" aria-label="Project files">
       {tree.map((node) => (
         <TreeNode
           key={node._id}
@@ -730,6 +745,7 @@ export default function FileExplorer({
           onConfirmNew={handleConfirmNew}
         />
       ))}
+      </div>
 
       {ctx && (
         <ContextMenu
