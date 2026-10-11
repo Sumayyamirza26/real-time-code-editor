@@ -49,6 +49,9 @@ const users = {
     if (all.find((u) => u.email === email)) {
       throw new Error("Email already registered");
     }
+    if (all.find((u) => u.username === username)) {
+      throw new Error("Username already taken");
+    }
     const user = { _id: newId(), email, password, username, createdAt: new Date().toISOString() };
     all.push(user);
     writeJson(USERS_FILE, all);

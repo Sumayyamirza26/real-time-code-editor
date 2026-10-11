@@ -22,19 +22,32 @@ const signToken = (user) => {
   );
 };
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 router.post("/signup", async (req, res) => {
   try {
-    const { email, password, username } = req.body;
+    let { email, password, username } = req.body;
     if (!email || !password || !username) {
       return res.status(400).json({ message: "Email, password, and username are required." });
+    }
+    email = String(email).trim().toLowerCase();
+    username = String(username).trim();
+    if (!EMAIL_RE.test(email)) {
+      return res.status(400).json({ message: "Invalid email address." });
+    }
+    if (String(password).length < 8) {
+      return res.status(400).json({ message: "Password must be at least 8 characters." });
+    }
+    if (username.length < 2 || username.length > 30) {
+      return res.status(400).json({ message: "Username must be 2-30 characters." });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
 
     let user;
     if (isDbConnected()) {
-      const existing = await User.findOne({ email });
+      const existing = await User.findOne({ $or: [{ email }, { username }] });
       if (existing) {
-        return res.status(400).json({ message: "Email already registered." });
+        return res.status(409).json({ message: "Email or username already registered." });
       }
       user = new User({ email, password: hashedPassword, username });
       await user.save();
@@ -49,20 +62,25 @@ router.post("/signup", async (req, res) => {
     if (error.message === "Server auth misconfigured") {
       return res.status(500).json({ message: error.message });
     }
-    res.status(400).json({ message: error.message });
+    if (error.code === 11000 || /already (registered|taken)/i.test(error.message)) {
+      return res.status(409).json({ message: "Email or username already registered." });
+    }
+    console.error("Signup error:", error.message);
+    res.status(500).json({ message: "Signup failed." });
   }
 });
 
 router.post("/login", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    let { email, password } = req.body;
     if (!email || !password) {
       return res.status(400).json({ message: "Email and password are required." });
     }
+    email = String(email).trim().toLowerCase();
     let user;
 
     if (isDbConnected()) {
-      user = await User.findOne({ email });
+      user = await User.findOne({ email }).select("+password");
     } else {
       user = fileStore.users.findByEmail(email);
     }
@@ -76,7 +94,8 @@ router.post("/login", async (req, res) => {
     if (error.message === "Server auth misconfigured") {
       return res.status(500).json({ message: error.message });
     }
-    res.status(500).json({ message: error.message });
+    console.error("Login error:", error.message);
+    res.status(500).json({ message: "Login failed." });
   }
 });
 
@@ -95,7 +114,8 @@ router.get("/me", auth, async (req, res) => {
     }
     res.json({ userId: user._id, username: user.username, email: user.email });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Auth me error:", error.message);
+    res.status(500).json({ message: "Request failed." });
   }
 });
 
