@@ -135,7 +135,9 @@ const Home = () => {
 
         <h4 className="mainLabel" style={{ marginBottom: "16px" }}>Paste invitation ROOM ID</h4>
         <div className="inputGroup">
+          <label className="srOnly" htmlFor="home-room-id">Room ID</label>
           <input
+            id="home-room-id"
             type="text"
             className="inputBox"
             placeholder="ROOM ID"
@@ -143,7 +145,9 @@ const Home = () => {
             value={roomId}
             onKeyUp={handleInputEnter}
           />
+          <label className="srOnly" htmlFor="home-username">Username</label>
           <input
+            id="home-username"
             type="text"
             className="inputBox"
             placeholder="USERNAME"
@@ -162,7 +166,7 @@ const Home = () => {
           </span>
           {!token && (
             <span style={{ fontSize: "11px", color: "var(--text-muted)", marginTop: "12px", textAlign: "center" }}>
-              💡 Tip: <span style={{ color: "var(--accent-green)", cursor: "pointer" }} onClick={() => navigate("/login")}>Log in</span> to save files persistently across sessions.
+              💡 Tip: <button type="button" style={{ background: "none", border: "none", padding: 0, font: "inherit", color: "var(--accent-green)", cursor: "pointer" }} onClick={() => navigate("/login")}>Log in</button> to save files persistently across sessions.
             </span>
           )}
         </div>

@@ -58,7 +58,9 @@ const Signup = () => {
         <h4 className="mainLabel">Create your account</h4>
 
         <div className="inputGroup">
+          <label className="srOnly" htmlFor="signup-username">Username</label>
           <input
+            id="signup-username"
             type="text"
             className="inputBox"
             placeholder="USERNAME"
@@ -69,7 +71,9 @@ const Signup = () => {
             required
           />
 
+          <label className="srOnly" htmlFor="signup-email">Email</label>
           <input
+            id="signup-email"
             type="email"
             className="inputBox"
             placeholder="EMAIL"
@@ -80,7 +84,9 @@ const Signup = () => {
             required
           />
 
+          <label className="srOnly" htmlFor="signup-password">Password</label>
           <input
+            id="signup-password"
             type="password"
             className="inputBox"
             placeholder="PASSWORD"
@@ -103,23 +109,25 @@ const Signup = () => {
 
           <span className="createInfo" style={{ marginTop: "16px", display: "block" }}>
             Already have an account? &nbsp;
-            <span
+            <button
+              type="button"
               onClick={() => navigate("/login")}
               className="createNewBtn"
               style={{ cursor: "pointer", color: "var(--accent-green)" }}
             >
               Log in
-            </span>
+            </button>
           </span>
           <span className="createInfo" style={{ marginTop: "8px", display: "block" }}>
             Or continue as guest &nbsp;
-            <span
+            <button
+              type="button"
               onClick={() => navigate("/home")}
               className="createNewBtn"
               style={{ cursor: "pointer", color: "var(--text-muted)" }}
             >
               Go to Home
-            </span>
+            </button>
           </span>
         </div>
       </div>

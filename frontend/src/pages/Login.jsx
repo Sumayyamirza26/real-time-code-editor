@@ -56,7 +56,9 @@ const Login = () => {
         />
         <h4 className="mainLabel">Log in to your account</h4>
         <div className="inputGroup">
+          <label className="srOnly" htmlFor="login-email">Email</label>
           <input
+            id="login-email"
             type="email"
             className="inputBox"
             placeholder="EMAIL"
@@ -66,7 +68,9 @@ const Login = () => {
             onKeyUp={handleInputEnter}
             required
           />
+          <label className="srOnly" htmlFor="login-password">Password</label>
           <input
+            id="login-password"
             type="password"
             className="inputBox"
             placeholder="PASSWORD"
@@ -86,23 +90,25 @@ const Login = () => {
           </button>
           <span className="createInfo" style={{ marginTop: "16px", display: "block" }}>
             Don't have an account? &nbsp;
-            <span
+            <button
+              type="button"
               onClick={() => navigate("/signup")}
               className="createNewBtn"
               style={{ cursor: "pointer", color: "var(--accent-green)" }}
             >
               Sign up
-            </span>
+            </button>
           </span>
           <span className="createInfo" style={{ marginTop: "8px", display: "block" }}>
             Or continue as guest &nbsp;
-            <span
+            <button
+              type="button"
               onClick={() => navigate("/home")}
               className="createNewBtn"
               style={{ cursor: "pointer", color: "var(--text-muted)" }}
             >
               Go to Home
-            </span>
+            </button>
           </span>
         </div>
       </div>
