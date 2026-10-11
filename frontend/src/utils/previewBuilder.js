@@ -209,7 +209,7 @@ ${html}
         }
         return String(a);
       }).join(' ');
-      window.parent.postMessage({ type: 'preview-console', level: level, message: msg }, '*');
+      window.parent.postMessage({ type: 'preview-console', level: level, message: msg }, window.location.origin);
     } catch(e) {}
   }
   var _log = console.log, _warn = console.warn, _error = console.error, _info = console.info;

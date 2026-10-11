@@ -13,9 +13,11 @@ export default function LivePreview({
   const [refreshKey, setRefreshKey] = useState(0);
   const isDraggingRef = useRef(false);
 
-  // Listen for console logs and errors sent from the sandboxed iframe
+  // Listen for console logs and errors sent from the sandboxed iframe.
+  // The iframe uses srcDoc (same origin) — ignore messages from anywhere else.
   useEffect(() => {
     const handleMessage = (e) => {
+      if (e.origin !== window.location.origin) return;
       if (e.data && e.data.type === "preview-console") {
         const newLog = {
           id: Date.now() + Math.random(),
@@ -39,6 +41,8 @@ export default function LivePreview({
       const blob = new Blob([htmlContent], { type: "text/html;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       window.open(url, "_blank");
+      // Release the blob once the new tab has had a chance to load it
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
     } catch {
       const newWin = window.open("", "_blank");
       if (newWin) {
