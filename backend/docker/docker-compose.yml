@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  node:
+    build:
+      context: .
+      dockerfile: Dockerfile.node
+    image: realtime-code-editor-node:latest
+
+  python:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    image: realtime-code-editor-python:latest
+
+  cpp:
+    build:
+      context: .
+      dockerfile: Dockerfile.cpp
+    image: realtime-code-editor-cpp:latest
+
+  java:
+    build:
+      context: .
+      dockerfile: Dockerfile.java
+    image: realtime-code-editor-java:latest
