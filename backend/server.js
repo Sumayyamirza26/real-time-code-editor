@@ -6,6 +6,8 @@ const { Server } = require("socket.io");
 const ACTIONS = require("./utils/Actions");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 const Room = require("./models/Room");
 const CodeExecutor = require("./utils/codeExecutor");
 require("dotenv").config();
@@ -22,9 +24,15 @@ if (dns.setDefaultResultOrder) {
 }
 
 const server = http.createServer(app);
+
+const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:3000,http://localhost:5000")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
   },
   pingTimeout: 60000,
@@ -50,8 +58,17 @@ mongoose
     console.warn("Server will continue running in memory mode for real-time editor.");
   });
 
-app.use(cors());
-app.use(express.json());
+app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
+app.use(cors({ origin: allowedOrigins }));
+app.use(express.json({ limit: "1mb" }));
+
+const tooMany = { message: "Too many requests, try again later." };
+const apiLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 300, standardHeaders: true, legacyHeaders: false });
+const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 50, standardHeaders: true, legacyHeaders: false, message: tooMany });
+const executeLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 60, standardHeaders: true, legacyHeaders: false, message: tooMany });
+
+app.use("/api", apiLimiter);
+app.use("/api/auth", authLimiter);
 
 // Routes
 app.use("/api/auth", require("./routes/auth"));
@@ -60,7 +77,7 @@ app.use("/api/files", require("./routes/files"));
 app.use("/api/folders", require("./routes/folders"));
 
 // POST /execute endpoint – simple one-shot HTTP execution (no stdin)
-app.post("/execute", (req, res) => {
+app.post("/execute", executeLimiter, (req, res) => {
   const { code, language } = req.body;
   if (!code || !language) {
     return res.status(400).json({ error: "code and language are required." });
