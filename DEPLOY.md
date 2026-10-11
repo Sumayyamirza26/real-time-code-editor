@@ -24,12 +24,13 @@ the URLs are wired below.
 
    | Key | Value |
    | --- | ----- |
-   | `JWT_SECRET` | your generated secret (**required** — server exits without it) |
+   | `JWT_SECRET` | a long random secret (**required** — server exits without it; never commit it) |
    | `JWT_EXPIRES_IN` | `7d` |
-   | `MONGODB_URI` | Atlas connection string (optional — omit for file fallback) |
+   | `MONGODB_URI` | `mongodb+srv://ramsha:<password>@realtime-code-editor.xulu1vq.mongodb.net/realtime-code-editor` (omit for file fallback) |
    | `FRONTEND_URL` | `https://<your-app>.vercel.app` (fill in after step 2, then redeploy) |
 
-   Leave `PORT` unset — Render injects it automatically.
+   Leave `PORT` unset — Render injects it automatically. Secrets go in the
+   dashboard only, never in the repo.
 4. Deploy. Confirm `https://<your-api>.onrender.com/health` returns `{"status":"ok"}`.
 
 ## 2. Frontend on Vercel
@@ -56,6 +57,11 @@ the URLs are wired below.
 2. Full check on the Vercel URL: sign up → log in → join a room → Run Code.
 
 ## Notes
+
+- **Atlas checklist** (if the backend logs a Mongo connection warning): cluster is
+  resumed (not paused), the `ramsha` database user password is correct, and
+  **Network Access allows `0.0.0.0/0`** — Render's outbound IPs aren't static.
+  Without a DB connection the app still runs on local JSON storage.
 
 - **Free-tier sleep:** Render's free plan sleeps after inactivity; the first load or
   socket connect after sleep takes ~30–60s. Paid plans don't sleep.
