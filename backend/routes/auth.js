@@ -9,6 +9,19 @@ const fileStore = require("../utils/fileStore");
 
 const isDbConnected = () => mongoose.connection.readyState === 1;
 
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
+
+const signToken = (user) => {
+  if (!process.env.JWT_SECRET) {
+    throw new Error("Server auth misconfigured");
+  }
+  return jwt.sign(
+    { userId: user._id.toString(), username: user.username },
+    process.env.JWT_SECRET,
+    { expiresIn: JWT_EXPIRES_IN }
+  );
+};
+
 router.post("/signup", async (req, res) => {
   try {
     const { email, password, username } = req.body;
@@ -30,12 +43,12 @@ router.post("/signup", async (req, res) => {
       user = fileStore.users.create({ email, password: hashedPassword, username });
     }
 
-    const token = jwt.sign(
-      { userId: user._id.toString(), username: user.username },
-      process.env.JWT_SECRET
-    );
+    const token = signToken(user);
     res.status(201).json({ token, username: user.username });
   } catch (error) {
+    if (error.message === "Server auth misconfigured") {
+      return res.status(500).json({ message: error.message });
+    }
     res.status(400).json({ message: error.message });
   }
 });
@@ -57,12 +70,12 @@ router.post("/login", async (req, res) => {
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ message: "Invalid email or password." });
     }
-    const token = jwt.sign(
-      { userId: user._id.toString(), username: user.username },
-      process.env.JWT_SECRET
-    );
+    const token = signToken(user);
     res.json({ token, username: user.username });
   } catch (error) {
+    if (error.message === "Server auth misconfigured") {
+      return res.status(500).json({ message: error.message });
+    }
     res.status(500).json({ message: error.message });
   }
 });

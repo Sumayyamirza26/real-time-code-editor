@@ -10,6 +10,11 @@ const Room = require("./models/Room");
 const CodeExecutor = require("./utils/codeExecutor");
 require("dotenv").config();
 
+if (!process.env.JWT_SECRET) {
+  console.error("Missing JWT_SECRET environment variable. Server cannot start safely.");
+  process.exit(1);
+}
+
 // Ensure IPv4 localhost resolves correctly on modern Node versions
 const dns = require("dns");
 if (dns.setDefaultResultOrder) {
