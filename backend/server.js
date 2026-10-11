@@ -113,6 +113,9 @@ app.post("/execute", executeLimiter, auth, (req, res) => {
 
 const buildDir = path.join(__dirname, "../frontend/build");
 app.use(express.static(buildDir));
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
 app.get("/api/*", (req, res) => {
   res.status(404).json({ message: "Not found" });
 });
