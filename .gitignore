@@ -12,22 +12,22 @@ frontend/.env
 build/
 frontend/build/
 
-# runtime data & temp
+# runtime data & temp (local only, auto-created at boot)
 .data/
 temp/
-backend/.data/
-backend/temp/
 
-# test artifacts
-test*
-file.*
-output
-test_*.js
-backend/test*
+# backend execution leftovers (scoped to backend/ only —
+# bare patterns like test*/file.*/*.cpp would also match real source
+# such as backend/models/File.js and backend/docker/Dockerfile.cpp)
+backend/test
+backend/test.*
+backend/test_*.js
 backend/file.*
 backend/output
-*.cpp
-*.py
+
+# never ignore these real source files
+!backend/models/File.js
+!backend/docker/Dockerfile.cpp
 
 # misc
 .DS_Store
