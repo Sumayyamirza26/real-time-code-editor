@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import toast from "react-hot-toast";
+import ACTIONS from "../Actions";
 
 // ── Language → icon / ext mapping ────────────────────────────────────────────
 const LANG_MAP = {
@@ -67,7 +68,19 @@ function ContextMenu({ x, y, items, onClose }) {
 function InlineEdit({ initialValue, onConfirm, onCancel }) {
   const [val, setVal] = useState(initialValue);
   const ref = useRef(null);
+  // Enter unmounts the input which fires blur — confirm/cancel exactly once
+  const doneRef = useRef(false);
   useEffect(() => { ref.current?.select(); }, []);
+  const confirm = (v) => {
+    if (doneRef.current) return;
+    doneRef.current = true;
+    onConfirm(v);
+  };
+  const cancel = () => {
+    if (doneRef.current) return;
+    doneRef.current = true;
+    onCancel();
+  };
   return (
     <input
       ref={ref}
@@ -76,10 +89,10 @@ function InlineEdit({ initialValue, onConfirm, onCancel }) {
       autoFocus
       onChange={(e) => setVal(e.target.value)}
       onKeyDown={(e) => {
-        if (e.key === "Enter") { e.stopPropagation(); onConfirm(val.trim()); }
-        if (e.key === "Escape") { e.stopPropagation(); onCancel(); }
+        if (e.key === "Enter") { e.stopPropagation(); confirm(val.trim()); }
+        if (e.key === "Escape") { e.stopPropagation(); cancel(); }
       }}
-      onBlur={() => onConfirm(val.trim())}
+      onBlur={() => confirm(val.trim())}
       onClick={(e) => e.stopPropagation()}
     />
   );
@@ -459,10 +472,10 @@ export default function FileExplorer({
         refresh(true);
       }, 300);
     };
-    socket.on("file-explorer-refresh", handler);
+    socket.on(ACTIONS.FILE_EXPLORER_REFRESH, handler);
     return () => {
       if (timer) clearTimeout(timer);
-      socket.off("file-explorer-refresh", handler);
+      socket.off(ACTIONS.FILE_EXPLORER_REFRESH, handler);
     };
   }, [socket, refresh]);
 
