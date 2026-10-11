@@ -116,6 +116,12 @@ app.use(express.static(buildDir));
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
+// API-only hosts (e.g. Render) have no frontend build — answer root with JSON
+// instead of Express's default "Cannot GET /". Where a build exists, the
+// static middleware above already served index.html and this never runs.
+app.get("/", (req, res) => {
+  res.status(200).json({ name: "CodeSync API", status: "ok", health: "/health" });
+});
 app.get("/api/*", (req, res) => {
   res.status(404).json({ message: "Not found" });
 });
