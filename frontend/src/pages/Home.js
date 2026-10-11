@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { v4 as uuidV4 } from "uuid";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { apiFetch } from "../api";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -12,9 +13,7 @@ const Home = () => {
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
-      fetch("/api/auth/me", {
-        headers: { Authorization: `Bearer ${storedToken}` },
-      })
+      apiFetch("/api/auth/me")
         .then((res) => {
           if (res.ok) return res.json();
           throw new Error("Session expired");

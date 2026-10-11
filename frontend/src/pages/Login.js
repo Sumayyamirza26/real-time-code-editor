@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { apiUrl } from "../api";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -25,7 +26,7 @@ const Login = () => {
     setError("");
     setLoading(true);
     try {
-      const response = await axios.post("/api/auth/login", formData);
+      const response = await axios.post(apiUrl("/api/auth/login"), formData);
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("username", response.data.username);
       toast.success(`Welcome back, ${response.data.username}!`);

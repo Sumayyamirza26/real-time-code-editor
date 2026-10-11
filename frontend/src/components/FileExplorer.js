@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import toast from "react-hot-toast";
 import ACTIONS from "../Actions";
+import { apiUrl } from "../api";
 
 // ── Language → icon / ext mapping ────────────────────────────────────────────
 const LANG_MAP = {
@@ -394,14 +395,14 @@ export default function FileExplorer({
 
     try {
       const [fRes, fiRes] = await Promise.all([
-        fetch("/api/folders", {
+        fetch(apiUrl("/api/folders"), {
           headers: {
             Authorization: `Bearer ${t}`,
             "Cache-Control": "no-cache, no-store",
           },
           signal: controller.signal,
         }),
-        fetch("/api/files/saved-files", {
+        fetch(apiUrl("/api/files/saved-files"), {
           headers: {
             Authorization: `Bearer ${t}`,
             "Cache-Control": "no-cache, no-store",
@@ -485,7 +486,7 @@ export default function FileExplorer({
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 8000);
     try {
-      const res = await fetch(url, {
+      const res = await fetch(apiUrl(url), {
         method,
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: body ? JSON.stringify(body) : undefined,
@@ -509,7 +510,7 @@ export default function FileExplorer({
       await apiCall("/api/folders", "POST", { name, parentId: parentId || null });
       toast.success(`Folder "${name}" created`);
       refresh(true);
-      if (socket) socket.emit("file-explorer-refresh", { roomId });
+      if (socket) socket.emit(ACTIONS.FILE_EXPLORER_REFRESH, { roomId });
     } catch (e) { toast.error(e.message); }
   }
 
@@ -519,7 +520,7 @@ export default function FileExplorer({
       await apiCall(`/api/folders/${folderId}/rename`, "PATCH", { name });
       toast.success("Folder renamed");
       refresh(true);
-      if (socket) socket.emit("file-explorer-refresh", { roomId });
+      if (socket) socket.emit(ACTIONS.FILE_EXPLORER_REFRESH, { roomId });
     } catch (e) { toast.error(e.message); }
   }
 
@@ -544,7 +545,7 @@ export default function FileExplorer({
       await apiCall(`/api/folders/${folderId}`, "DELETE");
       toast.success(`Folder "${folderName}" deleted`);
       refresh(true);
-      if (socket) socket.emit("file-explorer-refresh", { roomId });
+      if (socket) socket.emit(ACTIONS.FILE_EXPLORER_REFRESH, { roomId });
     } catch (e) {
       toast.error(e.message);
       refresh(true);
@@ -563,7 +564,7 @@ export default function FileExplorer({
       });
       toast.success(`File "${name}" created`);
       refresh(true);
-      if (socket) socket.emit("file-explorer-refresh", { roomId });
+      if (socket) socket.emit(ACTIONS.FILE_EXPLORER_REFRESH, { roomId });
       if (res?.file?._id && onFileOpenRef.current) {
         onFileOpenRef.current(res.file._id);
       }
@@ -577,7 +578,7 @@ export default function FileExplorer({
       toast.success("File renamed");
       if (onFileRenameRef.current) onFileRenameRef.current(fileId, name);
       refresh(true);
-      if (socket) socket.emit("file-explorer-refresh", { roomId });
+      if (socket) socket.emit(ACTIONS.FILE_EXPLORER_REFRESH, { roomId });
     } catch (e) { toast.error(e.message); }
   }
 
@@ -591,7 +592,7 @@ export default function FileExplorer({
       await apiCall(`/api/files/file/${fileId}`, "DELETE");
       toast.success(`"${fileName}" deleted`);
       refresh(true);
-      if (socket) socket.emit("file-explorer-refresh", { roomId });
+      if (socket) socket.emit(ACTIONS.FILE_EXPLORER_REFRESH, { roomId });
     } catch (e) {
       toast.error(e.message);
       refresh(true);

@@ -1,4 +1,5 @@
 import { io } from 'socket.io-client';
+import { API_BASE } from './api';
 
 export const initSocket = async () => {
     const options = {
@@ -11,10 +12,11 @@ export const initSocket = async () => {
         transports: ['websocket', 'polling'],
     };
 
+    // Same protocol as the page so HTTPS deployments never fall back to ws/http
     const backendUrl =
-        process.env.REACT_APP_BACKEND_URL ||
+        API_BASE ||
         (typeof window !== 'undefined' && window.location.port !== '5000'
-            ? `http://${window.location.hostname || 'localhost'}:5000`
+            ? `${window.location.protocol}//${window.location.hostname || 'localhost'}:5000`
             : '/');
 
     return io(backendUrl, options);

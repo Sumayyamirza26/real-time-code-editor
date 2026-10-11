@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { apiUrl } from "../api";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -26,7 +27,7 @@ const Signup = () => {
     setError("");
     setLoading(true);
     try {
-      const response = await axios.post("/api/auth/signup", formData);
+      const response = await axios.post(apiUrl("/api/auth/signup"), formData);
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("username", response.data.username);
       toast.success(`Account created! Welcome, ${response.data.username}!`);

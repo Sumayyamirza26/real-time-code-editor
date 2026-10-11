@@ -8,6 +8,7 @@ import FileExplorer from "../components/FileExplorer";
 import LivePreview from "../components/LivePreview";
 import { buildPreviewHtml } from "../utils/previewBuilder";
 import { initSocket } from "../socket";
+import { apiFetch, apiUrl } from "../api";
 import {
   useLocation,
   useNavigate,
@@ -295,9 +296,7 @@ const EditorPage = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
-    fetch("/api/auth/me", {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    apiFetch("/api/auth/me")
       .then((res) => {
         if (res.ok) return res.json();
         throw new Error("Invalid session");
@@ -620,12 +619,8 @@ const EditorPage = () => {
       const activeTab = openTabs.find((t) => t.id === activeTabId);
       const folderId = activeTab?.folderId || null;
 
-      const response = await fetch("/api/files/save-file", {
+      const response = await apiFetch("/api/files/save-file", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
         body: JSON.stringify({
           name,
           code: codeRef.current,
@@ -707,7 +702,7 @@ const EditorPage = () => {
     setAuthLoading(true);
     const endpoint = authTab === "login" ? "/api/auth/login" : "/api/auth/signup";
     try {
-      const res = await axios.post(endpoint, authForm);
+      const res = await axios.post(apiUrl(endpoint), authForm);
       const { token, username } = res.data;
       localStorage.setItem("token", token);
       localStorage.setItem("username", username);
@@ -819,9 +814,7 @@ const EditorPage = () => {
       return;
     }
     try {
-      const response = await fetch(`/api/files/file/${fileId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await apiFetch(`/api/files/file/${fileId}`);
       const file = await response.json();
       if (!response.ok) {
         toast.error(file.error || file.message || "Failed to load file");
@@ -885,10 +878,12 @@ const EditorPage = () => {
 
   async function handleDownloadFileById(fileId) {
     const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please log in to download files.");
+      return;
+    }
     try {
-      const res = await fetch(`/api/files/file/${fileId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await apiFetch(`/api/files/file/${fileId}`);
       const file = await res.json();
       if (res.ok) {
         handleDownloadFile(file);
