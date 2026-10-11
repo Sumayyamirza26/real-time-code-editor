@@ -1,0 +1,1 @@
+{"name": "realtime-code-editor", "private": true, "version": "0.1.0", "scripts": {"build": "npm run build --prefix frontend", "install:all": "npm install --prefix backend && npm install --prefix frontend", "start": "npm run build --prefix frontend && npm start --prefix backend", "start:front": "npm start --prefix frontend", "server:dev": "npm run dev --prefix backend"}}

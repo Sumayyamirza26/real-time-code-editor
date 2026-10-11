@@ -40,25 +40,39 @@ CodeSync is a browser-based collaborative code editor that lets multiple develop
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-username/codesync.git
-cd codesync
+git clone https://github.com/Sumayyamirza26/real-time-code-editor.git
+cd real-time-code-editor
 
-# 2. Install dependencies
-npm install
+# 2. Install dependencies (backend + frontend)
+npm run install:all
 ```
 
 ### Configuration
 
-Create a `.env` file in the project root:
+Copy the example env files and adjust values:
+
+```bash
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
+```
+
+`backend/.env`:
 
 ```env
 PORT=5000
-REACT_APP_BACKEND_URL=http://localhost:5000
 MONGODB_URI=mongodb://127.0.0.1:27017/realtime-code-editor
-JWT_SECRET=your_secret_key_here
+JWT_SECRET=change_me_to_a_long_random_string
+JWT_EXPIRES_IN=7d
+FRONTEND_URL=http://localhost:3000,http://localhost:5000
 ```
 
-> **Note:** MongoDB is optional. If it is not running, the app automatically falls back to local JSON file storage.
+`frontend/.env`:
+
+```env
+REACT_APP_BACKEND_URL=http://localhost:5000
+```
+
+> **Note:** MongoDB is optional. If it is not running, the app automatically falls back to local JSON file storage. `JWT_SECRET` is required — the backend refuses to start without it. Running code (Run button / `/execute`) requires a logged-in user.
 
 ### Running the App
 
