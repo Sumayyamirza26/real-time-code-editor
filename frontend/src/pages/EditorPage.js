@@ -25,6 +25,7 @@ const languages = [
 ];
 
 const AUTO_SAVE_DELAY = 30000; // 30 seconds
+const MAX_TERMINAL_LINES = 500; // cap terminal history to avoid memory growth
 
 const EditorPage = () => {
   const socketRef = useRef(null);
@@ -50,7 +51,12 @@ const EditorPage = () => {
   // Editor & Terminal state
   const [socket, setSocket] = useState(null);
   const [clients, setClients] = useState([]);
+  // Terminal & file state live here; terminal history is capped at MAX_TERMINAL_LINES
   const [terminalOutput, setTerminalOutput] = useState([]);
+  const pushTerminal = (lines) => {
+    const batch = Array.isArray(lines) ? lines : [lines];
+    setTerminalOutput((prev) => [...prev, ...batch].slice(-MAX_TERMINAL_LINES));
+  };
   const [selectedLanguage, setSelectedLanguage] = useState("javascript");
   const [terminalInput, setTerminalInput] = useState("");
   const [terminalHeight, setTerminalHeight] = useState(200);
@@ -439,10 +445,12 @@ const EditorPage = () => {
         setIsExecuting(false);
         const ts = new Date().toLocaleTimeString();
         if (error) {
-          setTerminalOutput((p) => [...p, `\n── Execution failed [${ts}] ──`]);
+          pushTerminal([`\n── Execution failed [${ts}] ──`, `${error}\n`]);
           toast.error("Execution failed — see terminal for details.");
         } else {
-          setTerminalOutput((p) => [...p, `\n── Done [${ts}] ──`]);
+          const lines = [`\n── Done [${ts}] ──`];
+          if (result) lines.push(`${result}\n`);
+          pushTerminal(lines);
           toast.success("Code executed successfully.");
         }
       });
@@ -451,17 +459,19 @@ const EditorPage = () => {
         setIsExecuting(false);
         const ts = new Date().toLocaleTimeString();
         if (error) {
-          setTerminalOutput((p) => [...p, `\n── Docker execution failed [${ts}] ──`]);
+          pushTerminal([`\n── Docker execution failed [${ts}] ──`, `${error}\n`]);
           toast.error("Docker execution failed — see terminal for details.");
         } else {
-          setTerminalOutput((p) => [...p, `\n── Docker done [${ts}] ──`]);
+          const lines = [`\n── Docker done [${ts}] ──`];
+          if (result) lines.push(`${result}\n`);
+          pushTerminal(lines);
           toast.success("Docker code executed successfully.");
         }
       });
 
       // Stream output/stderr chunks directly — do NOT trim so newlines are preserved
       s.on(ACTIONS.TERMINAL_OUTPUT, ({ output }) => {
-        setTerminalOutput((p) => [...p, output]);
+        pushTerminal(output);
       });
     };
 
