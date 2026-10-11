@@ -29,6 +29,7 @@ const AUTO_SAVE_DELAY = 30000; // 30 seconds
 const EditorPage = () => {
   const socketRef = useRef(null);
   const codeRef = useRef(null);
+  const connectFailedRef = useRef(false);
   const editorInstanceRef = useRef(null);
   const autoSaveTimerRef = useRef(null);
   const location = useLocation();
@@ -36,7 +37,11 @@ const EditorPage = () => {
   const reactNavigator = useNavigate();
 
   // Resolved user identity (supports refresh from localStorage)
-  const currentUsername = location.state?.username || localStorage.getItem("username") || "";
+  const stateUsername = location.state?.username;
+  const currentUsername = useMemo(
+    () => stateUsername || localStorage.getItem("username") || "",
+    [stateUsername]
+  );
 
   // Auth state
   const [authToken, setAuthToken] = useState(localStorage.getItem("token"));
@@ -367,6 +372,7 @@ const EditorPage = () => {
   // ── Socket setup ──────────────────────────────────────────────────────────
   useEffect(() => {
     let s = null;
+    let onReconnect = null;
 
     const init = async () => {
       s = await initSocket();
@@ -383,16 +389,24 @@ const EditorPage = () => {
       };
 
       s.on("connect", () => {
-        console.log("Socket connected:", s.id);
+        connectFailedRef.current = false;
         joinRoom();
       });
       if (s.connected) joinRoom();
 
-      s.on("connect_error", (err) => console.warn("Socket connect error:", err.message));
-      s.on("reconnect", () => {
+      // Toast only the first failure per outage — retries stay silent
+      s.on("connect_error", () => {
+        if (!connectFailedRef.current) {
+          connectFailedRef.current = true;
+          toast.error("Could not reach the server. Retrying…");
+        }
+      });
+      // Reconnect events fire on the manager (s.io), not the socket, in v4 clients
+      onReconnect = () => {
         toast.success("Reconnected to room");
         joinRoom();
-      });
+      };
+      if (s.io && typeof s.io.on === "function") s.io.on("reconnect", onReconnect);
       s.on("error", (err) => {
         if (err?.message) toast.error(err.message);
       });
@@ -455,11 +469,11 @@ const EditorPage = () => {
 
     return () => {
       if (s) {
+        if (s.io && typeof s.io.off === "function" && onReconnect) s.io.off("reconnect", onReconnect);
         s.disconnect();
         [
           "connect",
           "connect_error",
-          "reconnect",
           "error",
           ACTIONS.JOINED,
           ACTIONS.DISCONNECTED,
