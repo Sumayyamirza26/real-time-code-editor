@@ -562,6 +562,8 @@ const EditorPage = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("lastRoomId");
     setAuthToken(null);
     setShowUserMenu(false);
     toast.success("Logged out successfully");
@@ -904,8 +906,10 @@ const EditorPage = () => {
     const a = document.createElement("a");
     a.href = url;
     a.download = file.name;
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
     toast.success(`Downloaded ${file.name}`);
   }
 

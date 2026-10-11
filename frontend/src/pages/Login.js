@@ -40,7 +40,7 @@ const Login = () => {
   };
 
   const handleInputEnter = (e) => {
-    if (e.code === "Enter") {
+    if (e.key === "Enter") {
       handleSubmit(e);
     }
   };

@@ -128,7 +128,12 @@ footer a {
 .createNewBtn {
   color: var(--accent-green);
   text-decoration: none;
+  border: none;
   border-bottom: 1px solid var(--accent-green);
+  background: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
   transition: all 0.2s ease-in-out;
   margin-left: 5px;
 }

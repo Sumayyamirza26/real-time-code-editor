@@ -42,6 +42,7 @@ const Home = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
+    localStorage.removeItem("lastRoomId");
     setToken(null);
     setUsername("");
     toast.success("Logged out successfully");
@@ -66,7 +67,7 @@ const Home = () => {
   };
 
   const handleInputEnter = (e) => {
-    if (e.code === "Enter") {
+    if (e.key === "Enter") {
       joinRoom();
     }
   };
@@ -156,9 +157,9 @@ const Home = () => {
           </button>
           <span className="createInfo" style={{ marginTop: "16px" }}>
             If you don't have an invite then create &nbsp;
-            <a onClick={createNewRoom} href="#new-room" className="createNewBtn">
+            <button type="button" onClick={createNewRoom} className="createNewBtn">
               new room
-            </a>
+            </button>
           </span>
           {!token && (
             <span style={{ fontSize: "11px", color: "var(--text-muted)", marginTop: "12px", textAlign: "center" }}>
