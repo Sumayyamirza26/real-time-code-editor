@@ -101,7 +101,6 @@ ${cssCode}
 export function buildPreviewHtml({
   activeCode,
   activeLanguage,
-  activeFileName,
   openTabs = [],
   savedFiles = [],
   folders = [],
@@ -157,7 +156,7 @@ export function buildPreviewHtml({
   });
 
   // Also replace <link ... rel="stylesheet" ... href="..."> when rel comes before href
-  html = html.replace(/<link\s+([^>]*?)rel=["']stylesheet["']([^>]*?)href=["']([^"']+)["']([^>]*?)\/?>/gi, (match, before, mid, href, after) => {
+  html = html.replace(/<link\s+([^>]*?)rel=["']stylesheet["']([^>]*?)href=["']([^"']+)["']([^>]*?)\/?>/gi, (match, before, mid, href) => {
     if (/^(https?:|\/\/|data:)/i.test(href)) {
       return match;
     }

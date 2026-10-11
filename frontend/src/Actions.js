@@ -21,4 +21,4 @@ const ACTIONS = {
   FILE_EXPLORER_REFRESH: "file-explorer-refresh",
 };
 
-module.exports = ACTIONS;
+export default ACTIONS;

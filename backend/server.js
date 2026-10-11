@@ -27,7 +27,7 @@ if (dns.setDefaultResultOrder) {
 
 const server = http.createServer(app);
 
-const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:3000,http://localhost:5000")
+const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:3000,http://localhost:5000,http://localhost:5173")
   .split(",")
   .map((s) => s.trim())
   .filter(Boolean);

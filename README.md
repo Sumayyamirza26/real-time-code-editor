@@ -63,7 +63,7 @@ PORT=5000
 MONGODB_URI=mongodb://127.0.0.1:27017/realtime-code-editor
 JWT_SECRET=change_me_to_a_long_random_string
 JWT_EXPIRES_IN=7d
-FRONTEND_URL=http://localhost:3000,http://localhost:5000
+FRONTEND_URL=http://localhost:3000,http://localhost:5000,http://localhost:5173
 ```
 
 `frontend/.env`:
@@ -94,7 +94,7 @@ npm run server:dev
 npm run start:front
 ```
 
-Frontend runs on `http://localhost:3000`, backend on `http://localhost:5000`.
+Frontend runs on `http://localhost:5173`, backend on `http://localhost:5000`.
 
 ---
 

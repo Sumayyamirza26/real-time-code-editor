@@ -1,7 +1,7 @@
 // Central base URL for backend HTTP calls.
-// Relative by default so the CRA dev proxy and same-origin production both work;
-// set REACT_APP_BACKEND_URL to talk to a backend on another origin.
-export const API_BASE = process.env.REACT_APP_BACKEND_URL || "";
+// Relative by default so the Vite dev proxy and same-origin production both work;
+// set VITE_BACKEND_URL to talk to a backend on another origin.
+export const API_BASE = import.meta.env.VITE_BACKEND_URL || "";
 
 export const apiUrl = (path) => `${API_BASE}${path}`;
 
