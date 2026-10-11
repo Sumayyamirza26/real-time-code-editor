@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import ACTIONS from "../Actions";

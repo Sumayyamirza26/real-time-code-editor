@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import toast from "react-hot-toast";
 import ACTIONS from "../Actions";
 import { apiUrl } from "../api";
@@ -459,7 +459,9 @@ export default function FileExplorer({
     }
   }, []);
 
+  // Initial + auth-change data load (fetch-on-mount is the valid useEffect use case)
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     refresh(true);
   }, [authToken, refresh]);
 

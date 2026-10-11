@@ -1,16 +1,38 @@
-import React, { useEffect, useRef } from "react";
-import Codemirror from "codemirror";
-import "codemirror/lib/codemirror.css";
-import "codemirror/theme/dracula.css";
-import "codemirror/mode/javascript/javascript";
-import "codemirror/mode/python/python";
-import "codemirror/mode/clike/clike";
-import "codemirror/mode/xml/xml";
-import "codemirror/mode/css/css";
-import "codemirror/mode/htmlmixed/htmlmixed";
-import "codemirror/addon/edit/closetag";
-import "codemirror/addon/edit/closebrackets";
+import { useEffect, useRef } from "react";
+import { EditorView, basicSetup } from "codemirror";
+import { Compartment, Annotation, EditorState } from "@codemirror/state";
+import { javascript } from "@codemirror/lang-javascript";
+import { python } from "@codemirror/lang-python";
+import { cpp } from "@codemirror/lang-cpp";
+import { java } from "@codemirror/lang-java";
+import { html } from "@codemirror/lang-html";
+import { css } from "@codemirror/lang-css";
+import { oneDark } from "@codemirror/theme-one-dark";
 import ACTIONS from "../Actions";
+
+// Marks transactions applied from collaborators so they are not echoed back
+const remoteAnnotation = Annotation.define();
+
+const languageCompartment = new Compartment();
+const wrapCompartment = new Compartment();
+
+const getLanguageExtension = (lang) => {
+  switch (lang) {
+    case "python":
+      return python();
+    case "cpp":
+      return cpp();
+    case "java":
+      return java();
+    case "html":
+      return html();
+    case "css":
+      return css();
+    case "javascript":
+    default:
+      return javascript();
+  }
+};
 
 const Editor = ({
   socketRef,
@@ -21,87 +43,94 @@ const Editor = ({
   onCodeChange,
   onEditorInit,
 }) => {
-  const editorRef = useRef(null);
-  const textAreaRef = useRef(null);
+  const mountRef = useRef(null);
+  const viewRef = useRef(null);
 
   // Always call the latest callbacks/socket without re-creating the editor
   const liveRef = useRef({ onCodeChange, roomId, socket, socketRef });
-  liveRef.current = { onCodeChange, roomId, socket, socketRef };
+  useEffect(() => {
+    liveRef.current = { onCodeChange, roomId, socket, socketRef };
+  });
 
-  const getMode = (lang) => {
-    switch (lang) {
-      case "javascript":
-        return { name: "javascript", json: true };
-      case "python":
-        return { name: "python" };
-      case "cpp":
-        return { name: "text/x-c++src" };
-      case "java":
-        return { name: "text/x-java" };
-      case "html":
-        return { name: "htmlmixed" };
-      case "css":
-        return { name: "css" };
-      default:
-        return { name: "javascript", json: true };
-    }
+  const setRemoteCode = (code) => {
+    const view = viewRef.current;
+    if (!view) return;
+    const text = code ?? "";
+    if (text === view.state.doc.toString()) return;
+    view.dispatch({
+      changes: { from: 0, to: view.state.doc.length, insert: text },
+      annotations: remoteAnnotation.of(true),
+    });
   };
 
   useEffect(() => {
-    if (!textAreaRef.current || editorRef.current) return;
+    if (!mountRef.current || viewRef.current) return;
 
-    editorRef.current = Codemirror.fromTextArea(textAreaRef.current, {
-      mode: getMode(language),
-      theme: "dracula",
-      autoCloseTags: true,
-      autoCloseBrackets: true,
-      lineNumbers: true,
+    const view = new EditorView({
+      parent: mountRef.current,
+      state: EditorState.create({
+        doc: "",
+        extensions: [
+          basicSetup,
+          oneDark,
+          languageCompartment.of(getLanguageExtension(language)),
+          wrapCompartment.of(editorSettings?.wordWrap ? EditorView.lineWrapping : []),
+          EditorView.updateListener.of((update) => {
+            if (!update.docChanged) return;
+            const code = update.state.doc.toString();
+            liveRef.current.onCodeChange(code);
+            // Remote-applied edits must not be echoed back to the room
+            if (update.transactions.some((tr) => tr.annotation(remoteAnnotation))) return;
+            const activeSocket =
+              liveRef.current.socket || liveRef.current.socketRef?.current;
+            if (activeSocket) {
+              activeSocket.emit(ACTIONS.CODE_CHANGE, {
+                roomId: liveRef.current.roomId,
+                code,
+              });
+            }
+          }),
+        ],
+      }),
     });
-
-    if (onEditorInit) {
-      onEditorInit(editorRef.current);
+    viewRef.current = view;
+    if (editorSettings) {
+      view.dom.style.fontSize = `${editorSettings.fontSize || 14}px`;
     }
 
-    editorRef.current.on("change", (instance, changes) => {
-      const { origin } = changes;
-      const code = instance.getValue();
-      liveRef.current.onCodeChange(code);
+    if (onEditorInit) {
+      onEditorInit({
+        setValue: setRemoteCode,
+        getValue: () => view.state.doc.toString(),
+        refresh: () => view.requestMeasure(),
+      });
+    }
 
-      if (origin !== "setValue") {
-        const activeSocket =
-          liveRef.current.socket || liveRef.current.socketRef?.current;
-        if (activeSocket) {
-          activeSocket.emit(ACTIONS.CODE_CHANGE, {
-            roomId: liveRef.current.roomId,
-            code,
-          });
-        }
-      }
-    });
-
-    const editor = editorRef.current;
     return () => {
-      editor.toTextArea();
-      editorRef.current = null;
+      view.destroy();
+      viewRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (editorRef.current) {
-      editorRef.current.setOption("mode", getMode(language));
+    const view = viewRef.current;
+    if (view) {
+      view.dispatch({
+        effects: languageCompartment.reconfigure(getLanguageExtension(language)),
+      });
     }
   }, [language]);
 
   useEffect(() => {
-    if (editorRef.current && editorSettings) {
-      editorRef.current.setOption("lineWrapping", editorSettings.wordWrap);
-      
-      const cmElement = editorRef.current.getWrapperElement();
-      if (cmElement) {
-        cmElement.style.fontSize = `${editorSettings.fontSize}px`;
-        editorRef.current.refresh();
-      }
+    const view = viewRef.current;
+    if (view && editorSettings) {
+      view.dispatch({
+        effects: wrapCompartment.reconfigure(
+          editorSettings.wordWrap ? EditorView.lineWrapping : []
+        ),
+      });
+      view.dom.style.fontSize = `${editorSettings.fontSize || 14}px`;
     }
   }, [editorSettings]);
 
@@ -110,12 +139,7 @@ const Editor = ({
     if (!activeSocket || typeof activeSocket.on !== "function") return;
 
     const handleCodeChange = ({ code }) => {
-      if (code != null && editorRef.current) {
-        const currentCode = editorRef.current.getValue();
-        if (code !== currentCode) {
-          editorRef.current.setValue(code);
-        }
-      }
+      if (code != null) setRemoteCode(code);
     };
 
     activeSocket.on(ACTIONS.CODE_CHANGE, handleCodeChange);
@@ -125,7 +149,7 @@ const Editor = ({
     };
   }, [socket, socketRef]);
 
-  return <textarea ref={textAreaRef} id="realtimeEditor"></textarea>;
+  return <div ref={mountRef} className="cm6Host" />;
 };
 
 export default Editor;
