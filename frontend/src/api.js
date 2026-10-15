@@ -1,9 +1,25 @@
 // Central base URL for backend HTTP calls.
-// Relative by default so the Vite dev proxy and same-origin production both work;
-// set VITE_BACKEND_URL to talk to a backend on another origin.
-export const API_BASE = import.meta.env.VITE_BACKEND_URL || "";
+// 1. If VITE_BACKEND_URL is set at build time, sanitize and use it.
+// 2. If running on Vercel (*.vercel.app) without VITE_BACKEND_URL configured,
+//    fall back to the deployed Render backend so authentication and socket calls don't return 405.
+// 3. Otherwise (local development), keep relative ("") so the Vite dev proxy works.
+const envUrl = (import.meta.env.VITE_BACKEND_URL || "").trim().replace(/\/+$/, "");
+const getProductionFallback = () => {
+  if (typeof window !== "undefined") {
+    const host = window.location.hostname;
+    if (host.endsWith(".vercel.app") || host === "real-time-code-editor-blond.vercel.app") {
+      return "https://real-time-code-editor-jghh.onrender.com";
+    }
+  }
+  return "";
+};
 
-export const apiUrl = (path) => `${API_BASE}${path}`;
+export const API_BASE = envUrl || getProductionFallback();
+
+export const apiUrl = (path) => {
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  return `${API_BASE}${cleanPath}`;
+};
 
 export const authHeaders = (extra = {}) => {
   const token = localStorage.getItem("token");

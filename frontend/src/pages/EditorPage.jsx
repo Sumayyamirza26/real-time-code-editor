@@ -34,6 +34,7 @@ const EditorPage = () => {
   const connectFailedRef = useRef(false);
   const editorInstanceRef = useRef(null);
   const autoSaveTimerRef = useRef(null);
+  const executionTimeoutRef = useRef(null);
   const location = useLocation();
   const { roomId } = useParams();
   const reactNavigator = useNavigate();
@@ -440,7 +441,20 @@ const EditorPage = () => {
         setClients((prev) => prev.filter((c) => c.socketId !== socketId));
       });
 
+      const clearExecTimeout = () => {
+        if (executionTimeoutRef.current) {
+          clearTimeout(executionTimeoutRef.current);
+          executionTimeoutRef.current = null;
+        }
+      };
+
+      s.on("disconnect", () => {
+        clearExecTimeout();
+        setIsExecuting(false);
+      });
+
       s.on(ACTIONS.CODE_RESULT, ({ result, error }) => {
+        clearExecTimeout();
         setIsExecuting(false);
         const ts = new Date().toLocaleTimeString();
         if (error) {
@@ -455,6 +469,7 @@ const EditorPage = () => {
       });
 
       s.on(ACTIONS.DOCKER_CODE_RESULT, ({ result, error }) => {
+        clearExecTimeout();
         setIsExecuting(false);
         const ts = new Date().toLocaleTimeString();
         if (error) {
@@ -477,12 +492,17 @@ const EditorPage = () => {
     init();
 
     return () => {
+      if (executionTimeoutRef.current) {
+        clearTimeout(executionTimeoutRef.current);
+        executionTimeoutRef.current = null;
+      }
       if (s) {
         if (s.io && typeof s.io.off === "function" && onReconnect) s.io.off("reconnect", onReconnect);
         s.disconnect();
         [
           "connect",
           "connect_error",
+          "disconnect",
           "error",
           ACTIONS.JOINED,
           ACTIONS.DISCONNECTED,
@@ -512,7 +532,7 @@ const EditorPage = () => {
     reactNavigator("/");
   }
 
-  const handleExecute = () => {
+  const handleExecute = async () => {
     if (selectedLanguage === "html" || selectedLanguage === "css") {
       setIsPreviewOpen(true);
       setPreviewTrigger((p) => p + 1);
@@ -520,19 +540,79 @@ const EditorPage = () => {
       return;
     }
     if (isExecuting) return;
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please log in to run code.");
+      setAuthError("You must be logged in to execute code.");
+      setShowAuthModal(true);
+      return;
+    }
+
     setIsExecuting(true);
     if (isTerminalCollapsed) setIsTerminalCollapsed(false);
+
     // Clear previous output and show a header line for the new run
     const ts = new Date().toLocaleTimeString();
     setTerminalOutput([`── Running ${selectedLanguage.toUpperCase()} [${ts}] ──\n`]);
-    const action = runMode === "standard" ? ACTIONS.RUN_CODE : ACTIONS.DOCKER_RUN_CODE;
-    const payload = {
-      roomId,
-      code: codeRef.current,
-      language: selectedLanguage,
-      token: localStorage.getItem("token") || undefined,
-    };
-    if (socketRef.current) socketRef.current.emit(action, payload);
+
+    if (executionTimeoutRef.current) clearTimeout(executionTimeoutRef.current);
+    executionTimeoutRef.current = setTimeout(() => {
+      setIsExecuting(false);
+      pushTerminal([
+        `\n── Execution timed out [${new Date().toLocaleTimeString()}] ──\nServer did not respond within 25 seconds.\n`
+      ]);
+      toast.error("Execution timed out. Please check your connection or switch execution mode.");
+    }, 25000);
+
+    const isSocketConnected = socketRef.current && socketRef.current.connected;
+    if (isSocketConnected) {
+      const action = runMode === "standard" ? ACTIONS.RUN_CODE : ACTIONS.DOCKER_RUN_CODE;
+      const payload = {
+        roomId,
+        code: codeRef.current,
+        language: selectedLanguage,
+        token,
+      };
+      socketRef.current.emit(action, payload);
+    } else {
+      // Fallback: socket is not connected or reconnecting; execute via POST /execute
+      try {
+        const response = await apiFetch("/execute", {
+          method: "POST",
+          body: JSON.stringify({
+            code: codeRef.current,
+            language: selectedLanguage,
+          }),
+        });
+        const data = await response.json().catch(() => ({}));
+        if (executionTimeoutRef.current) {
+          clearTimeout(executionTimeoutRef.current);
+          executionTimeoutRef.current = null;
+        }
+        setIsExecuting(false);
+
+        const endTs = new Date().toLocaleTimeString();
+        if (data.error) {
+          pushTerminal([`\n── Execution failed [${endTs}] ──\n`, `${data.error}\n`]);
+          toast.error("Execution failed — see terminal for details.");
+        } else {
+          const lines = [`\n── Done [${endTs}] ──\n`];
+          if (data.output) lines.push(`${data.output}\n`);
+          pushTerminal(lines);
+          toast.success("Code executed successfully.");
+        }
+      } catch (err) {
+        if (executionTimeoutRef.current) {
+          clearTimeout(executionTimeoutRef.current);
+          executionTimeoutRef.current = null;
+        }
+        setIsExecuting(false);
+        const endTs = new Date().toLocaleTimeString();
+        pushTerminal([`\n── Execution error [${endTs}] ──\n`, `${err.message || "Could not reach server"}\n`]);
+        toast.error("Could not reach code execution server.");
+      }
+    }
   };
 
   function handleLanguageChange(e) {

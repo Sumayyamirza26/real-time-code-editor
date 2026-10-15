@@ -12,11 +12,15 @@ export const initSocket = async () => {
         transports: ['websocket', 'polling'],
     };
 
-    // Same protocol as the page so HTTPS deployments never fall back to ws/http
+    // Connect to API_BASE if set; otherwise in local development connect to port 5000
+    const isLocalDev =
+        typeof window !== 'undefined' &&
+        (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
     const backendUrl =
         API_BASE ||
-        (typeof window !== 'undefined' && window.location.port !== '5000'
-            ? `${window.location.protocol}//${window.location.hostname || 'localhost'}:5000`
+        (isLocalDev
+            ? `${window.location.protocol}//${window.location.hostname}:5000`
             : '/');
 
     return io(backendUrl, options);
